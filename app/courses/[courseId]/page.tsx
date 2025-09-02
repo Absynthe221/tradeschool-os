@@ -1,0 +1,295 @@
+import { CourseDetail } from '@/components/courses/CourseDetail'
+import { notFound } from 'next/navigation'
+import { hvacCompleteModules, courseStatistics, hvacFinalExam } from '@/data/hvac-complete-modules'
+import { cdlCompleteModules } from '@/data/cdl-complete-modules'
+
+const courses = {
+  'hvac-fundamentals': {
+    id: 'hvac-fundamentals',
+    title: 'Complete HVAC Technician Certification Course',
+    description: 'Master HVAC systems from fundamentals to advanced troubleshooting. Get certified as an HVAC technician with hands-on training, real-world projects, and industry-standard practices.',
+    category: 'HVAC Certification',
+    difficulty: 'Beginner to Advanced',
+    duration: courseStatistics.totalDuration,
+    price: '$299',
+    originalPrice: '$499',
+    rating: 4.9,
+    studentsCount: 2847,
+    instructor: {
+      name: 'Master Technician James Wilson',
+      title: 'EPA-Certified HVAC Master Technician',
+      avatar: '/instructors/james-wilson.jpg',
+      experience: '20+ years',
+      students: 8500,
+      rating: 4.9,
+      bio: 'EPA-certified HVAC Master Technician with 20+ years of field experience. Former Technical Director at Johnson Controls, specializing in commercial and residential HVAC systems. Certified trainer for EPA 608 and NATE programs.',
+      credentials: ['EPA 608 Universal Certification', 'NATE Certified', 'Energy Efficiency Expert', 'Safety Training Specialist', 'HVAC Excellence Certified']
+    },
+    features: [
+      'Hands-on Video Demonstrations',
+      'Real-World Case Studies', 
+      'EPA 608 Exam Preparation',
+      'NATE Certification Ready',
+      'Lifetime Access to Updates',
+      'Mobile Learning Support',
+      'Downloadable Resources',
+      '24/7 Instructor Support'
+    ],
+    requirements: [
+      'Basic understanding of physics (heat, electricity)',
+      'High school mathematics or equivalent',
+      'Safety awareness mindset',
+      'Access to computer/mobile for video lessons',
+      'Willingness to practice hands-on skills'
+    ],
+    outcomes: [
+      'Install and service HVAC systems professionally',
+      'Troubleshoot complex HVAC problems systematically', 
+      'Pass EPA 608 and NATE certification exams',
+      'Read and interpret electrical schematics',
+      'Perform proper refrigerant handling and recovery',
+      'Design basic HVAC systems for residential applications',
+      'Implement energy efficiency best practices',
+      'Execute proper safety procedures in all situations'
+    ],
+    modules: hvacCompleteModules,
+    curriculum: hvacCompleteModules.map(module => ({
+      id: module.id,
+      title: module.title,
+      duration: module.duration,
+      type: 'module',
+      description: module.description,
+      objectives: module.objectives,
+      completed: module.completed,
+      locked: module.locked,
+      videos: module.lessons.length,
+      activities: module.lessons.length,
+      questions: module.quiz.questions,
+      lessons: module.lessons
+    })).concat([{
+      id: 9,
+      title: 'Final Certification Exam',
+      duration: '2 hours',
+      type: 'exam',
+      description: hvacFinalExam.description,
+      objectives: ['Demonstrate mastery of all course concepts', 'Pass comprehensive certification exam'],
+      completed: false,
+      locked: true,
+      videos: 0,
+      activities: 0,
+      questions: hvacFinalExam.questions,
+      lessons: []
+    }]),
+    statistics: courseStatistics,
+    finalExam: hvacFinalExam
+  },
+  'cdl-fundamentals': {
+    id: 'cdl-fundamentals',
+    title: 'CDL Fundamentals: Commercial Driver Training',
+    description: 'Complete commercial driver training program covering CDL requirements, vehicle operation, safety practices, and road test preparation.',
+    category: 'CDL Certification',
+    difficulty: 'Beginner',
+    duration: '26 hours',
+    price: '$899',
+    originalPrice: '$1,299',
+    rating: 4.8,
+    studentsCount: 1250,
+    instructor: {
+      name: 'Michael Rodriguez',
+      title: 'CDL Master Instructor',
+      avatar: '/instructors/michael-rodriguez.jpg',
+      experience: '15+ years',
+      students: 3200,
+      rating: 4.8,
+      bio: 'CDL Master Instructor with 15+ years of commercial driving experience. Former safety director for major trucking companies. Certified by the Department of Transportation and Federal Motor Carrier Safety Administration.',
+      credentials: ['CDL Class A License', 'DOT Safety Certification', 'FMCSA Certified Instructor', 'Defensive Driving Specialist', 'Hazmat Endorsement']
+    },
+    features: [
+      'Comprehensive CDL Training',
+      'Practice Exams & Simulations',
+      'Vehicle Inspection Training',
+      'Road Test Preparation',
+      'Safety Practices & Procedures',
+      'Mobile Learning Support',
+      'Downloadable Study Materials',
+      '24/7 Instructor Support'
+    ],
+    requirements: [
+      'Valid driver\'s license',
+      'Clean driving record',
+      'Basic reading and writing skills',
+      'Access to computer/mobile for lessons',
+      'Willingness to learn safety procedures'
+    ],
+    outcomes: [
+      'Pass CDL written and road tests',
+      'Perform thorough vehicle inspections',
+      'Understand traffic laws and regulations',
+      'Execute proper safety procedures',
+      'Handle cargo securement properly',
+      'Navigate commercial vehicle operations',
+      'Maintain compliance with DOT regulations',
+      'Demonstrate professional driving skills'
+    ],
+    modules: cdlCompleteModules,
+    curriculum: cdlCompleteModules.map(module => ({
+      id: module.id,
+      title: module.title,
+      duration: module.duration,
+      type: 'module',
+      description: module.description,
+      objectives: module.objectives,
+      completed: module.completed,
+      locked: module.locked,
+      videos: module.lessons.length,
+      activities: module.lessons.length,
+      questions: module.quiz.questions,
+      lessons: module.lessons
+    })),
+    statistics: {
+      totalDuration: '26 hours',
+      totalLessons: 40,
+      totalModules: 8,
+      completionRate: 92,
+      averageRating: 4.8
+    }
+  },
+  'hvac-installation': {
+    id: 'hvac-installation',
+    title: 'HVAC Installation & Maintenance',
+    description: 'Learn professional installation techniques and maintenance procedures for residential and commercial HVAC systems.',
+    category: 'HVAC Installation',
+    difficulty: 'Intermediate',
+    duration: '60 hours',
+    price: '$449',
+    originalPrice: '$599',
+    rating: 4.9,
+    studentsCount: 1520,
+    instructor: {
+      name: 'Sarah Johnson',
+      title: 'HVAC Installation Specialist',
+      avatar: '/instructors/sarah-johnson.jpg',
+      experience: '12+ years',
+      students: 4200,
+      rating: 4.9,
+      bio: 'HVAC Installation Specialist with 12+ years of experience in residential and commercial installations. Former project manager for major HVAC contractors. Expert in energy-efficient systems and smart home integration.',
+      credentials: ['EPA 608 Universal Certification', 'NATE Installation Certified', 'Energy Star Partner', 'Smart Home Integration Expert', 'Project Management Professional']
+    },
+    features: [
+      'Professional Installation Techniques',
+      'Maintenance Procedures',
+      'Commercial System Training',
+      'Energy Efficiency Best Practices',
+      'Smart Home Integration',
+      'Project Management Skills',
+      'Lifetime Access to Updates',
+      '24/7 Instructor Support'
+    ],
+    requirements: [
+      'HVAC Fundamentals course completion',
+      'Basic electrical knowledge',
+      'Hands-on experience preferred',
+      'Access to tools and equipment',
+      'Safety certification'
+    ],
+    outcomes: [
+      'Install residential and commercial HVAC systems',
+      'Perform preventive maintenance procedures',
+      'Troubleshoot installation issues',
+      'Implement energy efficiency measures',
+      'Manage HVAC installation projects',
+      'Integrate smart home technologies',
+      'Ensure code compliance',
+      'Provide excellent customer service'
+    ],
+    modules: [],
+    curriculum: [],
+    statistics: {
+      totalDuration: '60 hours',
+      totalLessons: 18,
+      totalModules: 6,
+      completionRate: 88,
+      averageRating: 4.9
+    }
+  },
+  'hvac-advanced': {
+    id: 'hvac-advanced',
+    title: 'Advanced HVAC Systems',
+    description: 'Master complex HVAC systems including VRF, chiller systems, and building automation controls.',
+    category: 'HVAC Advanced',
+    difficulty: 'Advanced',
+    duration: '80 hours',
+    price: '$649',
+    originalPrice: '$899',
+    rating: 4.7,
+    studentsCount: 890,
+    instructor: {
+      name: 'Mike Rodriguez',
+      title: 'Advanced HVAC Systems Engineer',
+      avatar: '/instructors/mike-rodriguez.jpg',
+      experience: '18+ years',
+      students: 2800,
+      rating: 4.7,
+      bio: 'Advanced HVAC Systems Engineer with 18+ years specializing in complex commercial systems. Former chief engineer for Fortune 500 companies. Expert in VRF systems, building automation, and energy management.',
+      credentials: ['Professional Engineer (PE)', 'LEED AP BD+C', 'Building Automation Expert', 'Energy Management Specialist', 'VRF Systems Certified']
+    },
+    features: [
+      'VRF System Mastery',
+      'Building Automation Controls',
+      'Chiller System Operations',
+      'Energy Management Systems',
+      'Complex Troubleshooting',
+      'Advanced Diagnostics',
+      'Lifetime Access to Updates',
+      '24/7 Instructor Support'
+    ],
+    requirements: [
+      'HVAC Installation course completion',
+      'Strong electrical background',
+      'Building automation knowledge',
+      'Advanced troubleshooting skills',
+      'Engineering mindset'
+    ],
+    outcomes: [
+      'Design and implement VRF systems',
+      'Program building automation controls',
+      'Operate and maintain chiller systems',
+      'Optimize energy management systems',
+      'Troubleshoot complex HVAC issues',
+      'Implement advanced diagnostics',
+      'Ensure system efficiency',
+      'Lead technical teams'
+    ],
+    modules: [],
+    curriculum: [],
+    statistics: {
+      totalDuration: '80 hours',
+      totalLessons: 24,
+      totalModules: 8,
+      completionRate: 85,
+      averageRating: 4.7
+    }
+  }
+}
+
+interface PageProps {
+  params: {
+    courseId: string
+  }
+}
+
+export default function CoursePage({ params }: PageProps) {
+  const course = courses[params.courseId as keyof typeof courses]
+  
+  if (!course) {
+    notFound()
+  }
+
+  return <CourseDetail course={course} />
+}
+
+export async function generateStaticParams() {
+  return Object.keys(courses).map((courseId) => ({
+    courseId,
+  }))
+}
