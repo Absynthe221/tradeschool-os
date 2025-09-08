@@ -31,6 +31,25 @@ interface QuizComponentProps {
   questions: number
   passingScore: number
   onComplete?: () => void
+  // Optional external question bank override
+  questionBank?: {
+    id: string | number
+    question: string
+    options: string[]
+    correctIndex: number
+    explanation: string
+    category?: string
+  }[]
+  // Optional generator: build questions dynamically (e.g., from Schedule 1 parts)
+  generator?: () => {
+    id: number
+    question: string
+    options: string[]
+    correctAnswer: number
+    explanation: string
+    points: number
+    category: string
+  }[]
 }
 
 // Sample quiz questions for HVAC Fundamentals
@@ -107,7 +126,7 @@ const sampleQuestions: Question[] = [
   }
 ]
 
-export function QuizComponent({ lessonId, title, questions, passingScore, onComplete }: QuizComponentProps) {
+export function QuizComponent({ lessonId, title, questions, passingScore, onComplete, questionBank, generator }: QuizComponentProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answers, setAnswers] = useState<(number | null)[]>([])
@@ -119,8 +138,23 @@ export function QuizComponent({ lessonId, title, questions, passingScore, onComp
   const [streak, setStreak] = useState(0)
   const [maxStreak, setMaxStreak] = useState(0)
 
-  // Use actual HVAC quiz content based on lesson ID
+  // Use provided external bank or generator if available, otherwise fall back to existing HVAC mapping
   const getQuizQuestions = () => {
+    if (generator) {
+      const g = generator()
+      return g.slice(0, questions)
+    }
+    if (questionBank && questionBank.length > 0) {
+      return questionBank.slice(0, questions).map((q, index) => ({
+        id: typeof q.id === 'number' ? q.id : index + 1,
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.correctIndex,
+        explanation: q.explanation,
+        points: 10,
+        category: q.category || 'Ontario MTO'
+      }))
+    }
     switch(lessonId) {
       case 1:
         return hvacModule1KahootQuiz.map((q, index) => ({

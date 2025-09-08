@@ -21,6 +21,9 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { VideoPlayer } from '@/components/video/VideoPlayer'
 import { QuizComponent } from '@/components/quiz/QuizComponent'
+import { mtoQuestionBank } from '@/data/mto-questions'
+import { schedule1Parts } from '@/data/schedule1'
+import { Schedule1Checklist } from '@/components/courses/Schedule1Checklist'
 
 interface Course {
   id: string
@@ -48,9 +51,24 @@ export function CourseDetail({ course }: CourseDetailProps) {
   const [selectedModule, setSelectedModule] = useState<any>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [showQuiz, setShowQuiz] = useState(false)
-  const [expandedModules, setExpandedModules] = useState<number[]>([])
+  const [expandedModules, setExpandedModules] = useState<Array<string | number>>([])
 
-  const toggleModule = (moduleId: number) => {
+  const resolveVideoUrl = (module: any): string => {
+    const lesson = module?.selectedLesson
+    const direct = lesson?.videoUrl
+    if (direct) return direct
+    try {
+      const courseId = course.id
+      const moduleId = module?.id
+      const lessonId = lesson?.id
+      const key = `videoUrl:${courseId}:${moduleId}:${lessonId}`
+      const stored = localStorage.getItem(key)
+      if (stored) return stored
+    } catch {}
+    return 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  }
+
+  const toggleModule = (moduleId: string | number) => {
     setExpandedModules(prev => 
       prev.includes(moduleId) 
         ? prev.filter(id => id !== moduleId)
@@ -84,7 +102,7 @@ export function CourseDetail({ course }: CourseDetailProps) {
             <h2 className="text-white text-xl mt-2">{selectedModule.title}</h2>
           </div>
           <VideoPlayer 
-            videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" // Demo video
+            videoUrl={resolveVideoUrl(selectedModule)}
             title={selectedModule.title}
             onComplete={() => {
               console.log('Module completed!')
@@ -107,7 +125,36 @@ export function CourseDetail({ course }: CourseDetailProps) {
             ← Back to Course
           </button>
           <QuizComponent 
-            lessonId={selectedModule.id}
+            lessonId={Number((selectedModule.id as any) || 0)}
+            title={selectedModule.title}
+            questions={selectedModule.quiz?.questions || selectedModule.questions || 10}
+            passingScore={selectedModule.quiz?.passingScore || 80}
+            questionBank={mtoQuestionBank[(selectedModule.quiz?.bankId as keyof typeof mtoQuestionBank) || '']}
+            generator={() => {
+              // Auto-generate multiple-choice from Schedule 1 part when available
+              const partId: string | undefined = (selectedModule as any).schedulePartId
+              if (!partId) return []
+              const part = schedule1Parts.find(p => p.id === partId)
+              if (!part) return []
+              const makeQ = (text: string, type: 'minor'|'major', idx: number) => {
+                const options = type === 'minor'
+                  ? ['Minor defect', 'Major defect', 'Not a defect', 'Info only']
+                  : ['Major defect', 'Minor defect', 'Not a defect', 'Info only']
+                return {
+                  id: idx + 1,
+                  question: `${part.systemOrComponent}: ${text} — classify this defect`,
+                  options,
+                  correctAnswer: type === 'minor' ? 0 : 0, // option text handles mapping above
+                  explanation: type === 'minor' ? 'Listed under Minor defects.' : 'Listed under Major defects.',
+                  points: 10,
+                  category: 'Schedule 1'
+                }
+              }
+              const qs: any[] = []
+              part.minorDefects.forEach((d, i) => qs.push(makeQ(d, 'minor', i)))
+              part.majorDefects.forEach((d, i) => qs.push(makeQ(d, 'major', part.minorDefects.length + i)))
+              return qs
+            }}
             onComplete={() => {
               console.log('Quiz completed!')
               setShowQuiz(false)
@@ -307,6 +354,13 @@ export function CourseDetail({ course }: CourseDetailProps) {
                             </div>
                           )}
                         </div>
+
+                        {/* Schedule 1 Checklist for modules that map to a Schedule 1 part */}
+                        {(module as any).schedulePartId && (
+                          <div className="mt-4">
+                            <Schedule1Checklist partId={(module as any).schedulePartId} storageKey={`module:${module.id}`} />
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

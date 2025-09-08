@@ -54,6 +54,15 @@ export function CTA() {
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
+              href="/courses/air-brake-endorsement"
+              className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold 
+                       hover:bg-blue-50 transition-all duration-200 
+                       flex items-center space-x-2 group"
+            >
+              <span>Start Air Brake (Z)</span>
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
               href="/dashboard"
               className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold 
                        hover:bg-white hover:text-blue-600 transition-all duration-200"

@@ -9,17 +9,22 @@ export const metadata = {
   title: 'TradeSchool OS - Skilled Trades & STEM Learning Platform',
   description: 'Universal trade & STEM learning hub starting with HVAC. Master practical skills with hands-on training, video lessons, and real-world deployments.',
   manifest: '/manifest.json',
-  themeColor: '#3b82f6',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'TradeSchool OS',
   },
   icons: {
-    icon: '/icon-192x192.png',
-    apple: '/icon-192x192.png',
+    icon: '/icon-192x192.svg',
+    apple: '/icon-192x192.svg',
   },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: '#3b82f6',
 }
 
 export default function RootLayout({

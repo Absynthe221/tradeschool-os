@@ -30,13 +30,16 @@ export function VideoPlayer({ videoUrl, title, onComplete }: VideoPlayerProps) {
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const [volume, setVolume] = useState(1)
-  const [muted, setMuted] = useState(false)
+  const [muted, setMuted] = useState(true)
   const [fullscreen, setFullscreen] = useState(false)
   const [showControls, setShowControls] = useState(true)
   const [playbackRate, setPlaybackRate] = useState(1)
   const [isComplete, setIsComplete] = useState(false)
   const [isOnline, setIsOnline] = useState(true)
   const [isDownloaded, setIsDownloaded] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [useNative, setUseNative] = useState(false)
+  const isFileUrl = typeof videoUrl === 'string' && (videoUrl.endsWith('.mp4') || videoUrl.startsWith('/videos/'))
 
   const playerRef = useRef<ReactPlayer>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -70,6 +73,14 @@ export function VideoPlayer({ videoUrl, title, onComplete }: VideoPlayerProps) {
       }
     }
   }, [playing, showControls])
+
+  // Start playback (muted) when URL changes
+  useEffect(() => {
+    setErrorMessage(null)
+    setUseNative(isFileUrl)
+    setPlaying(true)
+    setMuted(true)
+  }, [videoUrl])
 
   const handleProgress = (state: { played: number; playedSeconds: number }) => {
     setPlayed(state.played)
@@ -154,32 +165,78 @@ export function VideoPlayer({ videoUrl, title, onComplete }: VideoPlayerProps) {
       )}
 
       {/* Video Player */}
-      <ReactPlayer
-        ref={playerRef}
-        url={videoUrl}
-        playing={playing}
-        volume={volume}
-        muted={muted}
-        playbackRate={playbackRate}
-        width="100%"
-        height="100%"
-        onProgress={handleProgress}
-        onDuration={setDuration}
-        onEnded={() => {
-          setIsComplete(true)
-          onComplete?.()
-        }}
-        config={{
-          file: {
-            attributes: {
-              controlsList: 'nodownload',
-              disablePictureInPicture: true,
+      {!useNative ? (
+        <ReactPlayer
+          ref={playerRef}
+          url={videoUrl}
+          playing={playing}
+          controls
+          playsinline
+          volume={volume}
+          muted={muted}
+          playbackRate={playbackRate}
+          width="100%"
+          height="100%"
+          onProgress={handleProgress}
+          onDuration={setDuration}
+          onEnded={() => {
+            setIsComplete(true)
+            onComplete?.()
+          }}
+          onError={(e) => {
+            console.error('Video playback error', e)
+            setErrorMessage('Video failed to play. Switching to native player...')
+            setUseNative(true)
+          }}
+          config={{
+            file: {
+              forceVideo: true,
+              attributes: {
+                controlsList: 'nodownload',
+                disablePictureInPicture: true,
+                playsInline: true,
+                autoPlay: true,
+                muted: true
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
+      ) : (
+        <video
+          src={videoUrl}
+          controls
+          playsInline
+          autoPlay
+          muted
+          preload="metadata"
+          onEnded={() => {
+            setIsComplete(true)
+            onComplete?.()
+          }}
+          onError={(e) => {
+            console.error('Native video playback error', e)
+            setErrorMessage('Video failed to play. Use the direct link below.')
+          }}
+          style={{ width: '100%', height: '100%', display: 'block', backgroundColor: 'black' }}
+        >
+          <source src={videoUrl} type="video/mp4" />
+        </video>
+      )}
 
-      {/* Custom Controls */}
+      {/* Error / Fallback */}
+      {errorMessage && (
+        <div className="absolute bottom-4 left-4 right-4 z-50">
+          <div className="bg-red-600/90 text-white px-4 py-3 rounded-lg text-sm">
+            {errorMessage}{' '}
+            <a href={videoUrl} target="_blank" rel="noreferrer" className="underline font-medium">
+              Open video in new tab
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Controls - hidden when using native player */}
+      {!useNative && (
       <div 
         className={cn(
           "absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent transition-opacity duration-300",
@@ -309,8 +366,10 @@ export function VideoPlayer({ videoUrl, title, onComplete }: VideoPlayerProps) {
           </div>
         </div>
       </div>
+      )}
 
-      {/* Video Info Overlay */}
+      {/* Video Info Overlay - hidden when using native player */}
+      {!useNative && (
       <div 
         className={cn(
           "absolute top-4 left-4 right-4 transition-opacity duration-300",
@@ -331,6 +390,7 @@ export function VideoPlayer({ videoUrl, title, onComplete }: VideoPlayerProps) {
           <div>{formatTime(duration)} total</div>
         </div>
       </div>
+      )}
     </div>
   )
 }

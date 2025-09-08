@@ -44,6 +44,34 @@ const tradeModules = [
     color: 'blue'
   },
   {
+    id: 'yard',
+    name: 'Air Brake Schedule 1 (Yard)',
+    icon: Truck,
+    description: 'Yard training video series for Schedule 1 air brake inspection with quizzes.',
+    status: 'available',
+    courses: 1,
+    students: 0,
+    rating: 4.8,
+    duration: '7.5 hours',
+    level: 'Beginner',
+    featured: false,
+    color: 'blue'
+  },
+  {
+    id: 'airbrake',
+    name: 'Air Brake (Z) Endorsement',
+    icon: Truck,
+    description: '2-Day Ontario Z Endorsement course with inspections, adjustment, and legal requirements.',
+    status: 'available',
+    courses: 1,
+    students: 0,
+    rating: 4.8,
+    duration: '24 hours',
+    level: 'Beginner',
+    featured: false,
+    color: 'blue'
+  },
+  {
     id: 'electrical',
     name: 'Electrical Systems',
     icon: Zap,
@@ -231,6 +259,26 @@ export function TradeModules() {
               </div>
             </div>
 
+            {/* Featured: Air Brake (Z) */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3">
+                  <Truck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">Featured: Air Brake (Z)</h4>
+                  <p className="text-sm text-gray-500">2‑Day Ontario Z Endorsement course</p>
+                </div>
+              </div>
+              <Link
+                href="/courses/air-brake-endorsement"
+                className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
+              >
+                Start Air Brake Training
+                <ArrowRight className="ml-1 w-4 h-4" />
+              </Link>
+            </div>
+
             <div className="bg-trade-50 rounded-xl p-6 border border-trade-200">
               <h4 className="font-semibold text-trade-800 mb-2">🎯 Learning Path</h4>
               <p className="text-sm text-trade-700 mb-4">
@@ -280,7 +328,15 @@ export function TradeModules() {
                   
                   {module.status === 'available' ? (
                     <Link
-                      href={module.id === 'cdl' ? '/courses/cdl-fundamentals' : '/courses/hvac-fundamentals'}
+                      href={
+                        module.id === 'cdl'
+                          ? '/courses/cdl-fundamentals'
+                          : module.id === 'airbrake'
+                          ? '/courses/air-brake-endorsement'
+                          : module.id === 'yard'
+                          ? '/courses/air-brake-schedule1-yard'
+                          : '/courses/hvac-fundamentals'
+                      }
                       className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
                     >
                       Start Learning

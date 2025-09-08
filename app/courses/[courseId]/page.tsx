@@ -2,6 +2,9 @@ import { CourseDetail } from '@/components/courses/CourseDetail'
 import { notFound } from 'next/navigation'
 import { hvacCompleteModules, courseStatistics, hvacFinalExam } from '@/data/hvac-complete-modules'
 import { cdlCompleteModules } from '@/data/cdl-complete-modules'
+import { mtoModules, mtoCourseStatistics } from '@/data/mto-modules'
+import { airbrakeModules, airbrakeCourseStatistics } from '@/data/airbrake-modules'
+import { airbrakeYardModules, airbrakeYardStats } from '@/data/airbrake-yard'
 
 const courses = {
   'hvac-fundamentals': {
@@ -82,6 +85,160 @@ const courses = {
     }]),
     statistics: courseStatistics,
     finalExam: hvacFinalExam
+  },
+  'air-brake-schedule1-yard': {
+    id: 'air-brake-schedule1-yard',
+    title: 'Air Brake Schedule 1 — Yard Training Series',
+    description: 'Structured yard training video series covering Schedule 1 air brake inspection items with per-session quizzes.',
+    category: 'CDL Certification',
+    difficulty: 'Beginner',
+    duration: airbrakeYardStats.totalDuration,
+    price: '$0',
+    originalPrice: '$0',
+    rating: 4.8,
+    studentsCount: 0,
+    instructor: {
+      name: 'TradeSchool OS CDL Team',
+      title: 'Instructor-Led Yard Training',
+      avatar: '/instructors/mto.jpg',
+      experience: 'Industry',
+      students: 0,
+      rating: 4.8,
+      bio: 'Hands-on Schedule 1 inspection training with videos and quizzes.',
+      credentials: ['Ontario Schedule 1']
+    },
+    features: [
+      'Session-based yard videos',
+      'Per-session quizzes',
+      'Checklist simulation'
+    ],
+    requirements: ['Access to classroom or yard environment'],
+    outcomes: [
+      'Perform Schedule 1 air brake inspection',
+      'Identify minor vs major defects',
+      'Pass practical inspection assessments'
+    ],
+    modules: airbrakeYardModules,
+    curriculum: airbrakeYardModules.map((module, idx) => ({
+      id: idx + 1,
+      title: module.title,
+      duration: module.duration,
+      type: 'module',
+      description: module.description,
+      objectives: [],
+      completed: false,
+      locked: false,
+      videos: module.lessons.length,
+      activities: module.lessons.length,
+      questions: module.quiz.questions,
+      lessons: module.lessons
+    })),
+    statistics: airbrakeYardStats
+  },
+  'air-brake-endorsement': {
+    id: 'air-brake-endorsement',
+    title: 'Ontario Air Brake (Z) Endorsement — 2-Day Course',
+    description: '24-hour classroom curriculum with videos, inspections, adjustment, legal requirements, quizzes and a final exam prep.',
+    category: 'CDL Certification',
+    difficulty: 'Beginner',
+    duration: airbrakeCourseStatistics.totalDuration,
+    price: '$0',
+    originalPrice: '$0',
+    rating: 4.8,
+    studentsCount: 0,
+    instructor: {
+      name: 'TradeSchool OS CDL Team',
+      title: 'Instructor-Led Classroom',
+      avatar: '/instructors/mto.jpg',
+      experience: 'Industry',
+      students: 0,
+      rating: 4.8,
+      bio: 'Air brake training aligned to Ontario handbook with module quizzes and prep.',
+      credentials: ['Ontario Handbook Aligned']
+    },
+    features: [
+      '2-day structured modules (24 hours)',
+      'Module quizzes and final prep',
+      'Downloadable checklists and charts'
+    ],
+    requirements: [
+      'Access to computer/mobile for lessons'
+    ],
+    outcomes: [
+      'Understand air brake systems and inspections',
+      'Measure pushrod stroke and verify adjustment',
+      'Prepare for Z endorsement written and practical exams'
+    ],
+    modules: airbrakeModules,
+    curriculum: airbrakeModules.map((module, idx) => ({
+      id: idx + 1,
+      title: module.title,
+      duration: module.duration,
+      type: 'module',
+      description: module.description,
+      objectives: [],
+      completed: false,
+      locked: false,
+      videos: module.lessons.length,
+      activities: module.lessons.length,
+      questions: module.quiz.questions,
+      lessons: module.lessons
+    })),
+    statistics: airbrakeCourseStatistics
+  },
+  'ontario-mto-truck': {
+    id: 'ontario-mto-truck',
+    title: 'Ontario MTO Truck Handbook — 5-Day Program',
+    description: '37.5-hour, 5-day classroom program aligned to the Official Ontario MTO Truck Handbook with post-session quizzes and a practice exam.',
+    category: 'CDL Certification',
+    difficulty: 'Beginner',
+    duration: mtoCourseStatistics.totalDuration,
+    price: '$0',
+    originalPrice: '$0',
+    rating: 4.8,
+    studentsCount: 0,
+    instructor: {
+      name: 'TradeSchool OS CDL Team',
+      title: 'Instructor-Led Classroom',
+      avatar: '/instructors/mto.jpg',
+      experience: 'Industry',
+      students: 0,
+      rating: 4.8,
+      bio: 'Structured program based on the Ontario MTO Truck Handbook with integrated quizzes and sign practice.' ,
+      credentials: ['Ontario Handbook Aligned']
+    },
+    features: [
+      '5-day structured modules (37.5 hours)',
+      'Post-session quizzes',
+      'Ontario signs practice set',
+      'Citations to official handbook'
+    ],
+    requirements: [
+      'Valid G licence recommended',
+      'Access to computer/mobile for lessons',
+      'Willingness to learn safety procedures'
+    ],
+    outcomes: [
+      'Understand Ontario commercial rules and signs',
+      'Perform daily inspections basics',
+      'Prepare for knowledge and road tests'
+    ],
+    modules: mtoModules,
+    curriculum: mtoModules.map(module => ({
+      id: module.id as unknown as number,
+      title: module.title,
+      duration: module.duration,
+      type: 'module',
+      description: module.description,
+      objectives: module.objectives,
+      completed: module.completed,
+      locked: module.locked,
+      videos: module.lessons.length,
+      activities: module.lessons.length,
+      questions: module.quiz.questions,
+      lessons: module.lessons
+    })),
+    statistics: mtoCourseStatistics
   },
   'cdl-fundamentals': {
     id: 'cdl-fundamentals',

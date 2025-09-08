@@ -60,6 +60,18 @@ npm run dev
 
 ## 📚 Available Trades
 
+### Ontario MTO Truck (New)
+- Course route: `/courses/ontario-mto-truck`
+- Modules defined in `data/mto-modules.ts` (5 days, 37.5h). Video URLs are placeholders; add later.
+- Question banks: `data/mto-questions.ts` (used by `QuizComponent` via `questionBank` prop).
+- Signs dataset: `data/mto-signs.ts` with images under `public/signs/ontario/...`.
+- Slice grid images into individual assets:
+
+```bash
+npx ts-node scripts/slice-ontario-signs.ts --input=./assets/raw/sheet1.png --rows=4 --cols=5 --category=warning --prefix=sheet1-
+```
+
+
 ### 🌨️ HVAC Systems
 - **Status**: Available
 - **Courses**: 12

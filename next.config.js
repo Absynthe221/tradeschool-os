@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const nextConfig = {
+  // Enable static export for GitHub Pages
+  output: 'export',
+  basePath,
+  assetPrefix: basePath,
+  trailingSlash: true,
   images: {
+    unoptimized: true,
     domains: ['localhost', 'supabase.co', 'youtube.com'],
     formats: ['image/webp', 'image/avif'],
   },

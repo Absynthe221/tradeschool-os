@@ -28,14 +28,14 @@
     {
       "src": "/screenshot-mobile.svg",
       "sizes": "390x844",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "form_factor": "narrow",
       "label": "Mobile view of the course dashboard"
     },
     {
       "src": "/screenshot-desktop.svg",
       "sizes": "1280x720",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "form_factor": "wide",
       "label": "Desktop view of the learning platform"
     }
@@ -48,7 +48,7 @@
       "url": "/dashboard/courses",
       "icons": [
         {
-          "src": "/icon-192x192.png",
+          "src": "/icon-192x192.svg",
           "sizes": "192x192"
         }
       ]
@@ -60,7 +60,7 @@
       "url": "/courses/hvac",
       "icons": [
         {
-          "src": "/icon-192x192.png",
+          "src": "/icon-192x192.svg",
           "sizes": "192x192"
         }
       ]
@@ -72,7 +72,7 @@
       "url": "/equipment",
       "icons": [
         {
-          "src": "/icon-192x192.png",
+          "src": "/icon-192x192.svg",
           "sizes": "192x192"
         }
       ]

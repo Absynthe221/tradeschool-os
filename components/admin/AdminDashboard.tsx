@@ -24,6 +24,8 @@ import {
   Star
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { UploadVideoForm } from './UploadVideoForm'
+import { Schedule1Form } from './Schedule1Form'
 
 interface AdminStats {
   totalUsers: number
@@ -143,6 +145,7 @@ export function AdminDashboard() {
     { id: 'courses', name: 'Courses', icon: BookOpen },
     { id: 'users', name: 'Users', icon: Users },
     { id: 'content', name: 'Content', icon: FileVideo },
+    { id: 'schedule1', name: 'Schedule 1 Builder', icon: Calendar },
     { id: 'analytics', name: 'Analytics', icon: TrendingUp },
     { id: 'settings', name: 'Settings', icon: Settings }
   ]
@@ -544,16 +547,7 @@ export function AdminDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Video Upload Card */}
-              <div className="bg-white rounded-lg p-6 shadow-sm border-2 border-dashed border-gray-300 hover:border-primary-400 transition-colors">
-                <div className="text-center">
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Upload New Video</h3>
-                  <p className="text-sm text-gray-500 mb-4">Upload course videos, tutorials, and demonstrations</p>
-                  <button className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-primary-700">
-                    Choose File
-                  </button>
-                </div>
-              </div>
+              <UploadVideoForm />
 
               {/* Content Stats */}
               <div className="bg-white rounded-lg p-6 shadow-sm">
@@ -659,6 +653,14 @@ export function AdminDashboard() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Schedule 1 Builder Tab */}
+        {activeTab === 'schedule1' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Schedule 1 Content Builder</h2>
+            <Schedule1Form />
           </div>
         )}
 
